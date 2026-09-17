@@ -2,6 +2,7 @@ import { defineEventHandler } from 'h3';
 import https from 'https';
 import { performance } from 'perf_hooks';
 import { getInternalBaseUrl } from '../utils/base-url';
+import { sendTelegramRaw } from '../utils/telegram';
 
 const HTTP_TIMEOUT_MS = 10000;
 const MAX_EXECUTION_TIME_MS = 12 * 60 * 1000;
@@ -139,6 +140,12 @@ export default defineEventHandler(async (event) => {
         return { domain: d.domain_name, status: 'skipped' };
       }
 
+      const [previous] = await callPgExecutor<{ is_up: boolean }>(
+        pgUrl,
+        'SELECT is_up FROM uptime WHERE domain_id = $1::uuid ORDER BY checked_at DESC LIMIT 1',
+        [d.id],
+      );
+
       const uptime = await checkDomainUptime(d.domain_name);
 
       await callPgExecutor(
@@ -154,6 +161,15 @@ export default defineEventHandler(async (event) => {
           uptime.ssl_handshake_time_ms,
         ],
       );
+
+      if (previous && previous.is_up !== uptime.is_up) {
+        const emoji = uptime.is_up ? '🟢' : '🔴';
+        const state = uptime.is_up ? 'back UP' : 'went DOWN';
+        const detail = uptime.is_up
+          ? `(${uptime.response_code})`
+          : `(code ${uptime.response_code || 'n/a'})`;
+        sendTelegramRaw(`${emoji} *${d.domain_name}* ${state} ${detail}`).catch(() => {});
+      }
 
       return {
         domain: d.domain_name,
