@@ -58,9 +58,38 @@ RECENT_NOTIFS=$(pg "
   SELECT count(*) FROM notifications WHERE created_at > now() - interval '12 hours';
 ")
 
+SSL_EXPIRING=$(pg "
+  WITH latest AS (
+    SELECT DISTINCT ON (domain_id) domain_id, valid_to
+    FROM ssl_certificates ORDER BY domain_id, created_at DESC
+  )
+  SELECT d.domain_name || ' (' || (l.valid_to - CURRENT_DATE) || 'd)'
+  FROM latest l JOIN domains d ON d.id = l.domain_id
+  WHERE l.valid_to IS NOT NULL AND l.valid_to - CURRENT_DATE <= 30
+  ORDER BY l.valid_to;
+")
+
+AVG_RESPONSE=$(pg "
+  SELECT avg(response_time_ms)::int FROM (
+    SELECT DISTINCT ON (domain_id) domain_id, response_time_ms
+    FROM uptime ORDER BY domain_id, checked_at DESC
+  ) latest;
+")
+
+SLOWEST=$(pg "
+  WITH latest AS (
+    SELECT DISTINCT ON (domain_id) domain_id, response_time_ms
+    FROM uptime ORDER BY domain_id, checked_at DESC
+  )
+  SELECT d.domain_name || ' (' || l.response_time_ms || 'ms)'
+  FROM latest l JOIN domains d ON d.id = l.domain_id
+  ORDER BY l.response_time_ms DESC
+  LIMIT 5;
+")
+
 NOW="$(TZ='Asia/Tehran' date '+%Y-%m-%d %H:%M (Tehran)')"
 
-MSG="🕐 *HiCheck 12-Hour Report* — ${NOW}
+MSG="🕐 *HiCheck Report* — ${NOW}
 ━━━━━━━━━━━━━━━
 📊 Domains: *${TOTAL}* total
 ✅ Up: *${UP_COUNT}*   ❌ Down: *${DOWN_COUNT}*"
@@ -77,6 +106,24 @@ if [ -n "$EXPIRING" ]; then
 
 *Expiring within 30 days:*
 $(echo "$EXPIRING" | sed 's/^/• /')"
+fi
+
+if [ -n "$SSL_EXPIRING" ]; then
+  MSG="${MSG}
+
+*SSL certs expiring within 30 days:*
+$(echo "$SSL_EXPIRING" | sed 's/^/• /')"
+fi
+
+MSG="${MSG}
+
+⏱️ Avg response time: *${AVG_RESPONSE}ms*"
+
+if [ -n "$SLOWEST" ]; then
+  MSG="${MSG}
+
+*Slowest domains:*
+$(echo "$SLOWEST" | sed 's/^/• /')"
 fi
 
 MSG="${MSG}

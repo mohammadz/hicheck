@@ -57,6 +57,39 @@ async function buildStatusReport(pgUrl: string): Promise<string> {
   );
   const recent = notifRow?.recent ?? '0';
 
+  const sslExpiring = await callPgExecutor<{ domain_name: string; days: number }>(
+    pgUrl,
+    `WITH latest AS (
+       SELECT DISTINCT ON (domain_id) domain_id, valid_to
+       FROM ssl_certificates ORDER BY domain_id, created_at DESC
+     )
+     SELECT d.domain_name, (l.valid_to - CURRENT_DATE) AS days
+     FROM latest l JOIN domains d ON d.id = l.domain_id
+     WHERE l.valid_to IS NOT NULL AND l.valid_to - CURRENT_DATE <= 30
+     ORDER BY l.valid_to;`,
+  );
+
+  const [avgRow] = await callPgExecutor<{ avg: string }>(
+    pgUrl,
+    `SELECT avg(response_time_ms)::int AS avg FROM (
+       SELECT DISTINCT ON (domain_id) domain_id, response_time_ms
+       FROM uptime ORDER BY domain_id, checked_at DESC
+     ) latest;`,
+  );
+  const avgResponse = avgRow?.avg ?? '0';
+
+  const slowest = await callPgExecutor<{ domain_name: string; response_time_ms: number }>(
+    pgUrl,
+    `WITH latest AS (
+       SELECT DISTINCT ON (domain_id) domain_id, response_time_ms
+       FROM uptime ORDER BY domain_id, checked_at DESC
+     )
+     SELECT d.domain_name, l.response_time_ms
+     FROM latest l JOIN domains d ON d.id = l.domain_id
+     ORDER BY l.response_time_ms DESC
+     LIMIT 5;`,
+  );
+
   const now = new Date()
     .toLocaleString('sv-SE', { timeZone: 'Asia/Tehran', hour12: false })
     .slice(0, 16);
@@ -72,6 +105,17 @@ async function buildStatusReport(pgUrl: string): Promise<string> {
   if (expiring.length) {
     msg += `\n\n*Expiring within 30 days:*\n${expiring
       .map((d) => `• ${d.domain_name} (${d.days}d)`)
+      .join('\n')}`;
+  }
+  if (sslExpiring.length) {
+    msg += `\n\n*SSL certs expiring within 30 days:*\n${sslExpiring
+      .map((d) => `• ${d.domain_name} (${d.days}d)`)
+      .join('\n')}`;
+  }
+  msg += `\n\n⏱️ Avg response time: *${avgResponse}ms*`;
+  if (slowest.length) {
+    msg += `\n\n*Slowest domains:*\n${slowest
+      .map((d) => `• ${d.domain_name} (${d.response_time_ms}ms)`)
       .join('\n')}`;
   }
   msg += `\n\n🔔 Notifications (last 12h): *${recent}*`;
