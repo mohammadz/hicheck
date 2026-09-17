@@ -30,8 +30,13 @@ async function checkDomainUptime(domainName: string): Promise<{
   is_up: boolean;
   response_code: number;
   response_time_ms: number;
+  dns_lookup_time_ms: number;
+  ssl_handshake_time_ms: number;
 }> {
   const startTime = performance.now();
+  let dnsLookupTime = 0;
+  let connectTime = 0;
+  let sslHandshakeTime = 0;
 
   return new Promise((resolve) => {
     const req = https.request(
@@ -48,21 +53,43 @@ async function checkDomainUptime(domainName: string): Promise<{
           is_up: (res.statusCode || 0) < 400,
           response_code: res.statusCode || 0,
           response_time_ms: Math.round(performance.now() - startTime),
+          dns_lookup_time_ms: Math.round(dnsLookupTime),
+          ssl_handshake_time_ms: Math.round(sslHandshakeTime),
         });
       },
     );
+
+    req.on('socket', (socket) => {
+      socket.once('lookup', () => {
+        dnsLookupTime = performance.now() - startTime;
+      });
+      socket.once('connect', () => {
+        connectTime = performance.now() - startTime;
+      });
+      socket.once('secureConnect', () => {
+        sslHandshakeTime = performance.now() - startTime - connectTime;
+      });
+    });
 
     req.on('error', () =>
       resolve({
         is_up: false,
         response_code: 0,
         response_time_ms: Math.round(performance.now() - startTime),
+        dns_lookup_time_ms: Math.round(dnsLookupTime),
+        ssl_handshake_time_ms: Math.round(sslHandshakeTime),
       }),
     );
 
     req.on('timeout', () => {
       req.destroy();
-      resolve({ is_up: false, response_code: 0, response_time_ms: HTTP_TIMEOUT_MS });
+      resolve({
+        is_up: false,
+        response_code: 0,
+        response_time_ms: HTTP_TIMEOUT_MS,
+        dns_lookup_time_ms: Math.round(dnsLookupTime),
+        ssl_handshake_time_ms: Math.round(sslHandshakeTime),
+      });
     });
 
     req.end();
@@ -117,8 +144,15 @@ export default defineEventHandler(async (event) => {
       await callPgExecutor(
         pgUrl,
         `INSERT INTO uptime (domain_id, is_up, response_code, response_time_ms, dns_lookup_time_ms, ssl_handshake_time_ms)
-       VALUES ($1::uuid, $2, $3, $4, 0, 0)`,
-        [d.id, uptime.is_up, uptime.response_code, uptime.response_time_ms],
+       VALUES ($1::uuid, $2, $3, $4, $5, $6)`,
+        [
+          d.id,
+          uptime.is_up,
+          uptime.response_code,
+          uptime.response_time_ms,
+          uptime.dns_lookup_time_ms,
+          uptime.ssl_handshake_time_ms,
+        ],
       );
 
       return {
