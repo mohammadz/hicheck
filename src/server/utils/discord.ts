@@ -5,7 +5,7 @@ const log = new Logger('discord');
 /** Send a message to the configured Discord webhook */
 export async function sendDiscordNotification(
   message: string,
-  title = 'Domain Locker',
+  title = 'HiCheck',
 ): Promise<boolean> {
   const url = process.env['DISCORD_WEBHOOK_URL']?.trim();
   if (!url) {

@@ -21,7 +21,7 @@
   },
   "HOME": {
     "FEATURES": "İmkanlar",
-    "DESCRIPTION": "Domain Locker ağıllı bildirişlər, ətraflı təhlillər və güclü alətlərlə domain portfelinizi asanlıqla idarə etmək, izləmək və optimallaşdırmaq üçün bütün imkanları bir araya gətirən platformadır. O, işlərinizi nizamlı və təhlükəsiz saxlamağa, hər zaman nəzarəti əlinizdə tutmağa kömək edir.",
+    "DESCRIPTION": "HiCheck ağıllı bildirişlər, ətraflı təhlillər və güclü alətlərlə domain portfelinizi asanlıqla idarə etmək, izləmək və optimallaşdırmaq üçün bütün imkanları bir araya gətirən platformadır. O, işlərinizi nizamlı və təhlükəsiz saxlamağa, hər zaman nəzarəti əlinizdə tutmağa kömək edir.",
     "PRICING": "Qiymətlər",
     "DEMO_TITLE": "Nümayiş",
     "LOADING_TITLE": "Yüklənir",
@@ -56,7 +56,7 @@
       "WATCH_VIDEO": "Videoya bax"
     },
     "HERO": {
-      "BRAND": "Domain Locker:",
+      "BRAND": "HiCheck:",
       "HEADLINE": "Bütün domain adlarınız üçün vahid mərkəz",
       "SUBHEADLINE": "Ağıllı, sadə və təhlükəsiz domain idarəetməsi",
       "FEATURES": {
@@ -72,7 +72,7 @@
       }
     },
     "WELCOME": {
-      "TITLE": "Domain Locker-ə xoş gəlmisiniz",
+      "TITLE": "HiCheck-ə xoş gəlmisiniz",
       "DESCRIPTION": "Burada bütün domain adlarınızı bir yerdə təhlükəsiz şəkildə izləyə bilərsiniz. İstər 1, istərsə də 1 000 domaininiz olsun, təhlükəsizlik təhlilləri, dəyişiklik və vaxtın bitməsi barədə bildirişlər, domain statistikası və digər imkanlarla ehtiyaclarınızı qarşılayırıq.",
       "GET_STARTED_TITLE": "Gəlin başlayaq!",
       "GET_STARTED_DESCRIPTION": "İlk domain adınızı əlavə etməklə başlayın, sizə yalnız URL lazımdır.\nOnu istənilən vaxt redaktə edə, həmçinin daha sonra başqa domainlər əlavə edə bilərsiniz.",
@@ -98,7 +98,7 @@
     }
   },
   "FOOTER": {
-    "NAME": "Domain Locker",
+    "NAME": "HiCheck",
     "DESCRIPTION": "Domain idarəetməsi üçün bütün imkanları birləşdirən alət",
     "CTAS": {
       "SIGN_UP": "Qeydiyyatdan keç",

@@ -48,7 +48,7 @@ export class DeleteAccountComponent implements OnInit {
   dangerCards: DangerCard[] = [
     {
       title: 'Leave Feedback',
-      body: "Considering closing your account, or facing issues with Domain Locker? We'd love to hear your feedback, so that we can improve.",
+      body: "Considering closing your account, or facing issues with HiCheck? We'd love to hear your feedback, so that we can improve.",
       buttonLabel: 'Leave Feedback',
       buttonLink: '/about/support/feedback',
       buttonIcon: 'pi pi-comment',

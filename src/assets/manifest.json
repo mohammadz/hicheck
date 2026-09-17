@@ -1,7 +1,7 @@
 {
-  "name": "Domain Locker",
-  "short_name": "DomainLocker",
-  "description": "Track, monitor, and manage your domains effortlessly with Domain Locker.",
+  "name": "HiCheck",
+  "short_name": "HiCheck",
+  "description": "Track, monitor, and manage your domains effortlessly with HiCheck.",
   "theme_color": "#a78bfa",
   "background_color": "#111827",
   "display_override": ["fullscreen", "standalone", "minimal-ui"],

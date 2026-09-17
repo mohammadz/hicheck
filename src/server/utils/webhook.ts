@@ -39,7 +39,7 @@ function resolveTarget(): { url: string; auth: string | null } | null {
 /** Send a push notification to the configured ntfy-compatible webhook */
 export async function sendWebhookNotification(
   message: string,
-  title = 'Domain Locker',
+  title = 'HiCheck',
   tags?: string[],
 ): Promise<boolean> {
   const target = resolveTarget();

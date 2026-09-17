@@ -10,9 +10,9 @@ export class MetaTagsService {
   private platformId = inject<object>(PLATFORM_ID);
 
   // Defaults
-  private defaultTitle = 'Domain Locker';
+  private defaultTitle = 'HiCheck';
   private defaultDescription =
-    'Domain Locker helps you track, monitor, and manage your domains effortlessly. ' +
+    'HiCheck helps you track, monitor, and manage your domains effortlessly. ' +
     'Stay on top of expiration dates, DNS records, and changes with alerts and detailed insights.';
   private defaultKeywords =
     'domain management, domain monitoring, DNS records, change tracking, alerts, SSL, WHOIS, domain security, url alerts';
@@ -34,12 +34,12 @@ export class MetaTagsService {
       case 'about':
         this.pageTitle = 'Documentation & Helpful Resources';
         this.pageDescription =
-          'Tips for managing your domains, getting the most out of Domain Locker, and helpful guides and articles';
+          'Tips for managing your domains, getting the most out of HiCheck, and helpful guides and articles';
         break;
       case 'login':
         this.pageTitle = 'Login';
         this.pageDescription =
-          'Log in or sign up to Domain Locker - the all-in-one domain management tool.';
+          'Log in or sign up to HiCheck - the all-in-one domain management tool.';
         break;
       case 'domains':
         this.pageTitle = 'Domains';
@@ -149,9 +149,9 @@ export class MetaTagsService {
         jsonLd = {
           '@context': 'https://schema.org',
           '@type': 'Article',
-          headline: 'About Domain Locker',
+          headline: 'About HiCheck',
           description:
-            'Learn more about Domain Locker, the all-in-one domain management tool.',
+            'Learn more about HiCheck, the all-in-one domain management tool.',
           author: {
             '@type': 'Person',
             name: 'Alicia Sykes',
@@ -159,7 +159,7 @@ export class MetaTagsService {
           },
           publisher: {
             '@type': 'Organization',
-            name: 'Domain Locker',
+            name: 'HiCheck',
             url: 'https://domain-locker.com',
           },
         };
@@ -186,7 +186,7 @@ export class MetaTagsService {
         jsonLd = {
           '@context': 'https://schema.org',
           '@type': 'Article',
-          headline: article['title'] || 'Domain Locker Articles',
+          headline: article['title'] || 'HiCheck Articles',
           description: article['description'] || 'No description available.',
           author: {
             '@type': 'Person',
@@ -195,7 +195,7 @@ export class MetaTagsService {
           },
           publisher: {
             '@type': 'Organization',
-            name: 'Domain Locker',
+            name: 'HiCheck',
             url: 'https://domain-locker.com',
             logo: { '@type': 'ImageObject', url: 'https://domain-locker.com/logo.png' },
           },
@@ -216,13 +216,13 @@ export class MetaTagsService {
         jsonLd = {
           '@context': 'https://schema.org',
           '@type': 'SoftwareApplication',
-          name: 'Domain Locker',
+          name: 'HiCheck',
           operatingSystem: 'All',
           applicationCategory: 'BusinessApplication',
           url: 'https://domain-locker.com',
           image: 'https://domain-locker.com/logo.png',
           description:
-            'Domain Locker is a powerful tool to manage domains, track changes, and monitor expiration dates.',
+            'HiCheck is a powerful tool to manage domains, track changes, and monitor expiration dates.',
           offers: software['offers'] || {
             '@type': 'Offer',
             price: '0.00',

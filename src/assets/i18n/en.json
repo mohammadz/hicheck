@@ -22,7 +22,7 @@
   
   "HOME": {
     "FEATURES": "Features",
-    "DESCRIPTION": "Domain Locker is the ultimate all-in-one platform to manage, monitor, and optimize your domain portfolio effortlessly, with smart alerts, detailed analytics, and powerful tools to keep you organized, secure, and always in control.",
+    "DESCRIPTION": "HiCheck is the ultimate all-in-one platform to manage, monitor, and optimize your domain portfolio effortlessly, with smart alerts, detailed analytics, and powerful tools to keep you organized, secure, and always in control.",
     "PRICING": "Pricing",
     "DEMO_TITLE": "Demo",
     "LOADING_TITLE": "Loading",
@@ -57,7 +57,7 @@
       "WATCH_VIDEO": "Watch Video"
     },
     "HERO": {
-      "BRAND": "Domain Locker:",
+      "BRAND": "HiCheck:",
       "HEADLINE": "The Central Hub for all your Domain Names",
       "SUBHEADLINE": "Smart, simple and secure domain management",
       "FEATURES": {
@@ -73,7 +73,7 @@
       }
     },
     "WELCOME": {
-      "TITLE": "Welcome to Domain Locker",
+      "TITLE": "Welcome to HiCheck",
       "DESCRIPTION": "Here you'll be able to securely keep track of all your domain names in one place. Whether you've got 1 or 1,000 domains, we've got you covered - with security insights, change and expiry notifications, domain stats and more.",
       "GET_STARTED_TITLE": "Let's get you started!",
       "GET_STARTED_DESCRIPTION": "Begin by setting up your first domain name, all you need is the URL.\nYou'll always be able to edit it, as well as add more later.",
@@ -100,7 +100,7 @@
     }
   },
   "FOOTER": {
-    "NAME": "Domain Locker",
+    "NAME": "HiCheck",
     "DESCRIPTION": "The all-on-one domain management tool",
     "CTAS": {
       "SIGN_UP": "Sign Up",

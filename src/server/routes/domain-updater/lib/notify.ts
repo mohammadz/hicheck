@@ -59,7 +59,7 @@ export async function notifyUser(
       message
         ? `[${domainName}] ${message}`
         : `Change detected in ${domainName}: ${changeType}`,
-      'Domain Locker Update',
+      'HiCheck Update',
       [changeType],
     );
   } catch (err) {

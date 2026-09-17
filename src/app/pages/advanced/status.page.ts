@@ -581,7 +581,7 @@ export default class StatusPage {
       options: {
         title: {
           display: true,
-          text: 'Domain Locker Uptime',
+          text: 'HiCheck Uptime',
           color: this.getCssVariableColor('--text-color', '#333'),
         },
         responsive: true,

@@ -215,7 +215,7 @@ export class ErrorHandlerService {
         : 'None';
 
     console.log(
-      `\n%c🔐 Domain Locker V${appVersion}` +
+      `\n%c🔐 HiCheck V${appVersion}` +
         '%c\nLicensed under MIT, © Alicia Sykes 2025.\nSource: github.com/lissy93/domain-locker\n',
       'color:#a78bfa; background:#0b1021; font-size:1.5rem; padding:0.15rem 0.25rem; ' +
         'margin: 1rem auto 0.5rem auto; font-family: Helvetica; border: 2px solid #a78bfa; ' +
