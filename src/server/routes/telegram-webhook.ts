@@ -19,6 +19,14 @@ async function callPgExecutor<T>(endpoint: string, query: string): Promise<T[]> 
   return data.data || [];
 }
 
+/** Runs a fresh live check across every domain, blocking until it's done */
+async function runLiveMonitor(baseUrl: string): Promise<void> {
+  const res = await fetch(`${baseUrl}/api/domain-monitor`, { method: 'POST' });
+  if (!res.ok) {
+    throw new Error(`domain-monitor failed with status ${res.status}`);
+  }
+}
+
 async function buildStatusReport(pgUrl: string): Promise<string> {
   const [totalRow] = await callPgExecutor<{ total: string }>(
     pgUrl,
@@ -96,13 +104,21 @@ export default defineEventHandler(async (event) => {
   if (text === '/check' || text === '/status') {
     const baseUrl = getInternalBaseUrl(event);
     const pgUrl = `${baseUrl}/api/pg-executer`;
-    try {
-      const report = await buildStatusReport(pgUrl);
-      await sendTelegramRaw(report);
-    } catch (err) {
-      log.error(`Failed to build status report: ${err instanceof Error ? err.message : String(err)}`);
-      await sendTelegramRaw('⚠️ Failed to build status report, check server logs.');
-    }
+
+    // Ack fast so Telegram doesn't time out and retry the update, then do
+    // the (slow, ~30-60s for ~100 domains) live check in the background.
+    await sendTelegramRaw('🔄 Running a live check on all domains, this takes a minute…');
+
+    (async () => {
+      try {
+        await runLiveMonitor(baseUrl);
+        const report = await buildStatusReport(pgUrl);
+        await sendTelegramRaw(report);
+      } catch (err) {
+        log.error(`Failed to build status report: ${err instanceof Error ? err.message : String(err)}`);
+        await sendTelegramRaw('⚠️ Failed to build status report, check server logs.');
+      }
+    })();
   }
 
   return { ok: true };
