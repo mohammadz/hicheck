@@ -57,10 +57,12 @@ async function buildStatusReport(pgUrl: string): Promise<string> {
   );
   const recent = notifRow?.recent ?? '0';
 
-  const now = new Date().toISOString().replace('T', ' ').slice(0, 16);
+  const now = new Date()
+    .toLocaleString('sv-SE', { timeZone: 'Asia/Tehran', hour12: false })
+    .slice(0, 16);
 
   let msg =
-    `🕐 *HiCheck Status* — ${now} UTC\n━━━━━━━━━━━━━━━\n` +
+    `🕐 *HiCheck Status* — ${now} (Tehran)\n━━━━━━━━━━━━━━━\n` +
     `📊 Domains: *${total}* total\n` +
     `✅ Up: *${upCount}*   ❌ Down: *${latest.length - upCount}*`;
 

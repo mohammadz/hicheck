@@ -58,7 +58,7 @@ RECENT_NOTIFS=$(pg "
   SELECT count(*) FROM notifications WHERE created_at > now() - interval '12 hours';
 ")
 
-NOW="$(date '+%Y-%m-%d %H:%M %Z')"
+NOW="$(TZ='Asia/Tehran' date '+%Y-%m-%d %H:%M (Tehran)')"
 
 MSG="🕐 *HiCheck 12-Hour Report* — ${NOW}
 ━━━━━━━━━━━━━━━
