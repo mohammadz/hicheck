@@ -83,7 +83,12 @@ MSG="${MSG}
 
 🔔 Notifications (last 12h): *${RECENT_NOTIFS}*"
 
-curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
   -d chat_id="${TELEGRAM_CHAT_ID}" \
   --data-urlencode text="$MSG" \
-  -d parse_mode="Markdown" > /dev/null
+  -d parse_mode="Markdown")
+
+if [[ "$RESPONSE" != *'"ok":true'* ]]; then
+  echo "Telegram send failed: $RESPONSE" >&2
+  exit 1
+fi
